@@ -182,7 +182,6 @@ au FileType java,php,pascal setl shiftwidth=4
 au FileType java,php,pascal setl tabstop=4
 au FileType python setlocal tabstop=8 expandtab shiftwidth=4 softtabstop=4
 au BufNewFile,BufRead *.md set filetype=markdown
-au BufRead,BufNewFile *.vm set ft=html syntax=velocity
 
 set smarttab
 set lbr
@@ -397,6 +396,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : '',
     \ 'php' : $VIMFILES.'/dict/funclist.txt',
     \ 'javascript' : $VIMFILES.'/dict/javascript.dict',
+    \ 'coffee' : $VIMFILES.'/dict/javascript.dict',
     \ }
 
 " Define keyword.
@@ -406,13 +406,13 @@ endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
 " Plugin key-mappings.
-imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
+"imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+"smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+"inoremap <expr><C-g>     neocomplcache#undo_completion()
+"inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
 " SuperTab like snippets behavior.
-imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
@@ -467,5 +467,7 @@ nmap <leader>mt :TMiniBufExplorer<CR>
 nmap <leader>mc :TMiniBufExplorer<CR>
 nmap <leader>jn :%!python -m json.tool<CR>
 
+let g:UltiSnipsUsePythonVersion = 2
+let g:UltiSnipsSnippetDirectories = ["myultisnips"]
 "nmap <leader>d :call AutoUpdatseTheLastUpdateInfo()<CR>
 "Last update:2012-10-21 22:39:55
