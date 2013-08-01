@@ -15,7 +15,6 @@
       cd bundle/Command-T/
       make install
 
-
 ##配置
 
 vim配置文件，插件使用pathogen.vim来控制，配置文件需要导入config.vim，

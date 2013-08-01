@@ -187,6 +187,7 @@ set smarttab
 set lbr
 " 设置文本宽度为78
 set tw=78
+set fo+=m
 "Auto indent
 set ai
 set si
@@ -392,12 +393,12 @@ let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 set completeopt-=preview
 
 " 设置字典 ~/.vim/dict/文件的路径
-let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'php' : $VIMFILES.'/dict/funclist.txt',
-    \ 'javascript' : $VIMFILES.'/dict/javascript.dict',
-    \ 'coffee' : $VIMFILES.'/dict/javascript.dict',
-    \ }
+"let g:neocomplcache_dictionary_filetype_lists = {
+    "\ 'default' : '',
+    "\ 'php' : $VIMFILES.'/dict/funclist.txt',
+    "\ 'javascript' : $VIMFILES.'/dict/javascript.dict',
+    "\ 'coffee' : $VIMFILES.'/dict/javascript.dict',
+    "\ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
@@ -428,7 +429,7 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
@@ -463,11 +464,14 @@ nmap <leader>th :tabprevious<CR>
 nmap <leader>tl :tabnext<CR>
 nmap <leader>tn :tabnew<CR>
 
-nmap <leader>mt :TMiniBufExplorer<CR>
-nmap <leader>mc :TMiniBufExplorer<CR>
+nmap <leader>mt :MBEToggle<CR>
+nmap <leader>mc :MBEClose<CR>
 nmap <leader>jn :%!python -m json.tool<CR>
 
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsSnippetDirectories = ["myultisnips"]
 "nmap <leader>d :call AutoUpdatseTheLastUpdateInfo()<CR>
 "Last update:2012-10-21 22:39:55
+
+" 自动保存文件
+au InsertLeave *.* write
