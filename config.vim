@@ -1,54 +1,58 @@
+" 区分不同的操作系统
+" 配置统一的变量$VIMFILES
 if has('win32')
-    let $VIMFILES = $VIM.'/vimfiles'
+  let $VIMFILES = $VIM.'/vimfiles'
 else
-    let $VIMFILES = $HOME.'/.vim'
+  let $VIMFILES = $HOME.'/.vim'
 endif
+
+" 引入 Vundle插件管理工具
+" https://github.com/gmarik/Vundle.vim
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-source $VIMFILES/vundle.vim
-source $VIMFILES/funcs.vim
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
 
-"指定英文逗号作为<leader>键
+" 配置插件
+source $VIMFILES/vundle.vim
+" 配置自定义函数
+source $VIMFILES/funcs.vim
+
+" 指定英文逗号作为<leader>键
 let mapleader=","
 
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
+" 不向后兼容vi
 set nocompatible
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
-"if has("vms")
-  "set nobackup		" do not keep a backup file, use versions instead
-"else
-  "set backup		" keep a backup file
-"endif
-"set backupdir=$VIMFILES/bak
 set nobackup
+
 " 重启后撤销历史可用 persistent undo 
 set undofile
 set undodir=$VIMFILES/bak
-set undolevels=1000 "maximum number of changes that can be undone
+" 最大可回滚层级，如果太大了不好，导致备份文件夹太多了
+" 我的mac上甚至出现bak文件有3G那么大
+set undolevels=100 
 
-
-set history=50		" keep 50 lines of command line history
+set history=50
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
 
+" 高亮当前行
+if has('gui')
+  set cursorline
+endif
+
 " 把shell设置为bash
 set shell=/bin/bash
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
 
-" Don't use Ex mode, use Q for formatting
+cnoremap w!! w !sudo tee % >/dev/null
+
+" Q map到gq，滚到页面底部
 map Q gq
 
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
+" CTRL-u在输入模式下，删除一个单词
+" CTRL-U删除一行
 inoremap <C-U> <C-G>u<C-U>
 
 " In many terminal emulators the mouse works just fine, thus enable it.
@@ -108,24 +112,13 @@ endif
 set guioptions-=T           " 隐藏工具栏
 set guioptions-=m           " 隐藏菜单栏
 
-"set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI "易水空间的设置
-"set guifont=Courier_New:h12:cANSI "苹果字体
-"set gfw=幼圆:h10.5:cGB2312 "中文幼圆字体
-"set gfw=YaHei:h10.5:cGB2312 "雅黑字体 
-"小屏幕配置
-"set guifont=Bitstream_Vera_Sans_Mono:h9:cANSI
-"set gfw=Yahei_Mono:h10:cGB2312
 if has("win32")
   "set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
   "set gfw=Yahei_Mono:h12:cGB2312
 endif
 
 if has("mac")
-  "set guifont=Courier_New:h16
-  "set guifont=Courier:h14
-  "set guifont=Menlo_Regular:h14
   set guifont=Monaco:h14
-  "set guifont=Andale_Mono:h14
 endif
 
 " 配置多语言环境
@@ -170,6 +163,7 @@ let b:javascript_fold=1
 " 打开javascript对dom、html和css的支持
 let javascript_enable_domhtmlcss=1
 
+" 主题
 color Tomorrow-Night
 
 "使用空格替换tab
@@ -204,17 +198,14 @@ set complete-=k complete+=k
 "双击m键删除^M符号
 nmap mm :%s/\r//g<cr>
 
-" 合并my.vim
-" tree 打开NERDTree
-"cmap bm NERDTreeFromBookmark 
-
 " php xdebug日志高亮
 au BufRead,BufNewFile *.xt set ft=xt syntax=xt
+
 " Map <CTRL>-P to check the file for syntax
 :setl makeprg=php
 :set errorformat=%m\ in\ %f\ on\ line\ %l
 :noremap <C-P> :call CheckSyntax()<CR>
-"map <C-I> :TlistToggle<CR>
+
 set tags=tags;
 set autochdir
 "set foldmethod:manual
@@ -236,42 +227,6 @@ let javascript_enable_domhtmlcss=1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" taglist
-let Tlist_Auto_Highlight_Tag = 1
-"let Tlist_Auto_Open = 1
-let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
-let Tlist_Auto_Update = 1
-let Tlist_Close_On_Select = 0
-let Tlist_Compact_Format = 0
-let Tlist_Display_Prototype = 0
-let Tlist_Display_Tag_Scope = 1
-let Tlist_Enable_Fold_Column = 0
-let Tlist_Exit_OnlyWindow = 1
-let Tlist_File_Fold_Auto_Close = 0
-let Tlist_GainFocus_On_ToggleOpen = 1
-let Tlist_Hightlight_Tag_On_BufEnter = 1
-let Tlist_Inc_Winwidth = 0
-let Tlist_Max_Submenu_Items = 1
-let Tlist_Max_Tag_Length = 30
-let Tlist_Process_File_Always = 0
-let Tlist_Show_Menu = 0
-let Tlist_Show_One_File = 0
-"let Tlist_Sort_Type = order
-"let Tlist_Use_Horiz_Window = 0
-"let Tlist_Use_Right_Window = 1
-let Tlist_WinWidth = 30
-let tlist_php_settings = 'php;c:class;i:interfaces;d:constant;f:function'
-"let Tlist_JS_Settings = 'javascript;s:string;a:array;o:object;f:function'
-
-let g:netrw_winsize = 30
-nmap fe :Sexplore!<CR>
-
-let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
-let g:winManagerWidth = 30
-let g:defaultExplorer = 0
-nmap <C-W><C-F> :FirstExplorerWindow<cr>
-nmap <C-W><C-B> :BottomExplorerWindow<cr>
-"set statusline=%F%m%r,%Y,%{&fileformat}\ \ \ ASCII=\%b,HEX=\%B\ \ \ %l,%c%V\ %p%%\ \ \ [\ %L\ lines\ in\ all\ ]
 
 "Vimwiki配置
 if has("win32")
@@ -303,31 +258,13 @@ nmap <A-f> :VimwikiAll2HTML <CR>
 let g:vimwiki_camel_case = 0
 "Toggle list item on/off (checked/unchecked)
 nmap <S-Space> :VimwikiToggleListItem <CR>
-" ctrl + shift + h 打开wiki homepage
-"nmap <leader>home :VimwikiIndex<CR>
 
 set wrap
 set textwidth=80
 set formatoptions=qrn1
 set colorcolumn=80
-"highlight when over lenght
-"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-"match OverLength /\%81v.\+/
 
-"nmap <C-V> "+p<CR>
 nnoremap ; :
-"\cfg编辑配置文件
-",n查找下一个
-"nmap <leader>cn :cn<CR>
-"前一个
-"nmap <leader>cp :cp<CR>
-"nmap <leader>d  <C-D>
-"nmap <leader>j  <C-D>
-"nmap <leader>p  <C-U>
-"nmap <leader>u  <C-U>
-" ack 命令
-"let g:ackprg= expand("ack -H --nocolor --nogroup --column")
-
 
 "Ack 配置
 if has("win32")
@@ -343,8 +280,6 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1   
 let g:miniBufExplModSelTarget = 1  
 let g:miniBufExplMoreThanOne=0  
-
-" 重载配置文件，立即生效，无须重启
 
 set winaltkeys=no
 nnoremap <space> <C-D><CR>
@@ -391,14 +326,6 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 set completeopt-=preview
-
-" 设置字典 ~/.vim/dict/文件的路径
-"let g:neocomplcache_dictionary_filetype_lists = {
-    "\ 'default' : '',
-    "\ 'php' : $VIMFILES.'/dict/funclist.txt',
-    "\ 'javascript' : $VIMFILES.'/dict/javascript.dict',
-    "\ 'coffee' : $VIMFILES.'/dict/javascript.dict',
-    "\ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
@@ -450,13 +377,11 @@ map <leader>ff :NERDTreeToggle<CR>
 " 打开文件的时候退出nerdtree
 let g:NERDTreeQuitOnOpen = 1
 
-" ,fm 打开WMToggle
-nmap <leader>fm :WMToggle<cr>
-nmap <leader>tb :TagbarToggle<cr>
-nmap <leader>t :call Eward_search_in_path()<cr>
 nnoremap <leader>cfg :e $VIMFILES/config.vim<CR>
+" 重载配置文件，立即生效，无须重启
 nnoremap <leader>so :source $VIMFILES/config.vim<cr>
 nnoremap <leader>sp :call Eward_set_pwd()<cr>
+nmap <leader>t :call Eward_search_in_path()<cr>
 
 nnoremap <leader><space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
@@ -468,8 +393,16 @@ nmap <leader>mt :MBEToggle<CR>
 nmap <leader>mc :MBEClose<CR>
 nmap <leader>jn :%!python -m json.tool<CR>
 
+" 向上移动一行
+nmap <leader>u ddkP
+" 想下移动一行
+nmap <leader>d ddp
+vmap <leader>u xkP`[V`]
+vmap <leader>d xp`[V`]
+
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsSnippetDirectories = ["myultisnips"]
+let g:UltiSnipsSnippetsDir = "~/.vim/bundle/snipmate-snippets/myultisnips/"
 "nmap <leader>d :call AutoUpdatseTheLastUpdateInfo()<CR>
 "Last update:2012-10-21 22:39:55
 
