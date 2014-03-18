@@ -1,7 +1,8 @@
 Bundle 'gmarik/vundle'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-Bundle 'wincent/Command-T'
+"Bundle 'wincent/Command-T'
+Bundle 'kien/ctrlp.vim'
 Bundle 'ervandew/supertab'
 Bundle 'sjl/gundo.vim'
 Bundle 'kchmck/vim-coffee-script'
@@ -15,7 +16,9 @@ Bundle 'JazzCore/neocomplcache-ultisnips'
 
 " 代码注释插件
 Bundle 'scrooloose/nerdcommenter'
-Bundle 'Lokaltog/vim-powerline'
+"Bundle 'Lokaltog/vim-powerline'
+" Powerline
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'tpope/vim-surround'
 " 等号对其插件，现在感觉用去不是很大
 " Bundle 'godlygeek/tabular'
@@ -42,3 +45,8 @@ Bundle 'wavded/vim-stylus'
 Bundle 'airblade/vim-gitgutter'
 " 缩进展示插件
 Bundle 'Yggdroot/indentLine'
+
+" Smart selection of the closest text object
+Bundle 'gcmt/wildfire.vim'
+" Sublime Text style multiple selections
+Bundle 'terryma/vim-multiple-cursors'

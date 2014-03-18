@@ -1,3 +1,4 @@
+echo "(>^.^<)"
 " 区分不同的操作系统
 " 配置统一的变量$VIMFILES
 if has('win32')
@@ -45,8 +46,6 @@ endif
 
 " 把shell设置为bash
 set shell=/bin/bash
-
-cnoremap w!! w !sudo tee % >/dev/null
 
 " Q map到gq，滚到页面底部
 map Q gq
@@ -379,9 +378,9 @@ let g:NERDTreeQuitOnOpen = 1
 
 nnoremap <leader>cfg :e $VIMFILES/config.vim<CR>
 " 重载配置文件，立即生效，无须重启
-nnoremap <leader>so :source $VIMFILES/config.vim<cr>
+nnoremap <leader>sv :source $VIMFILES/config.vim<cr>
 nnoremap <leader>sp :call Eward_set_pwd()<cr>
-nmap <leader>t :call Eward_search_in_path()<cr>
+"nmap <leader>t :call Eward_search_in_path()<cr>
 
 nnoremap <leader><space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
@@ -403,8 +402,17 @@ vmap <leader>d xp`[V`]
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsSnippetDirectories = ["myultisnips"]
 let g:UltiSnipsSnippetsDir = "~/.vim/bundle/snipmate-snippets/myultisnips/"
-"nmap <leader>d :call AutoUpdatseTheLastUpdateInfo()<CR>
-"Last update:2012-10-21 22:39:55
 
 " 自动保存文件
 au InsertLeave *.* write
+
+" powerline config
+if has("gui_running")
+   let s:uname = system("uname")
+   if s:uname == "Darwin\n"
+      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
+   endif
+endif
+
+" ctrlp disabled
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/node_modules/*,*/build/*        " Linux/MacOSX
