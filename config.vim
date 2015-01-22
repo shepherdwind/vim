@@ -1,4 +1,3 @@
-echo "(>^.^<)"
 " 区分不同的操作系统
 " 配置统一的变量$VIMFILES
 if has('win32')
@@ -10,6 +9,7 @@ endif
 " 引入 Vundle插件管理工具
 " https://github.com/gmarik/Vundle.vim
 set rtp+=~/.vim/bundle/vundle/
+"set rtp+=~/.vim/bundle/vim-table-mode/
 call vundle#rc()
 
 " 配置插件
@@ -210,11 +210,11 @@ set autochdir
 "set foldmethod:manual
 "set foldmethod=syntax
 set foldmethod=marker
-autocmd filetype javascript set foldmethod=syntax
-au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
+autocmd filetype javascript setl foldmethod=syntax
+" 文件增加后缀.js
+autocmd filetype javascript set suffixesadd+=.js
+"au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
 set foldnestmax=2
-let javascript_fold=1
-let javaScript_fold=1         " JavaScript
 let perl_fold=1               " Perl
 let php_folding=1             " PHP
 let r_syntax_folding=1        " R
@@ -269,16 +269,18 @@ nnoremap ; :
 if has("win32")
   let g:ackprg="ack -H --nocolor --nogroup --column"
 elseif has("mac")
-  let g:ackprg="ack -H --nocolor --nogroup --column"
+  let g:ackprg = 'ag --nogroup --nocolor --column'
 else
   let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 endif
 " MiniBufExplorer
-let g:miniBufExplMapWindowNavVim = 1   
-let g:miniBufExplMapWindowNavArrows = 1   
-let g:miniBufExplMapCTabSwitchBufs = 1   
-let g:miniBufExplModSelTarget = 1  
-let g:miniBufExplMoreThanOne=0  
+"let g:miniBufExplMapWindowNavVim = 1
+"let g:miniBufExplMapWindowNavArrows = 1
+"let g:miniBufExplMapCTabSwitchBufs = 1
+"let g:miniBufExplModSelTarget = 1
+"let g:miniBufExplMoreThanOne=0
+"let g:miniBufExplorerMoreThanOne=2
+"let g:miniBufExplMapWindowNavVim = 0
 
 set winaltkeys=no
 nnoremap <space> <C-D><CR>
@@ -297,9 +299,6 @@ let g:user_zen_settings = {
 \}
 
 autocmd InsertChange *.{py,js,css},*vimrc call AutoUpdateTheLastUpdateInfo()
-
-let g:miniBufExplorerMoreThanOne=2
-let g:miniBufExplMapWindowNavVim = 0
 
 au! BufRead,BufNewFile *.json set filetype=json
 
@@ -374,7 +373,7 @@ nmap <leader>cd :call OpenFoldPwd()<CR>
 " NERDTree
 map <leader>ff :NERDTreeToggle<CR>
 " 打开文件的时候退出nerdtree
-let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeQuitOnOpen = 0
 
 nnoremap <leader>cfg :e $VIMFILES/config.vim<CR>
 " 重载配置文件，立即生效，无须重启
@@ -383,6 +382,8 @@ nnoremap <leader>sp :call Eward_set_pwd()<cr>
 "nmap <leader>t :call Eward_search_in_path()<cr>
 
 nnoremap <leader><space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+nmap <D-]> :tabprevious<cr>
+nmap <D-[> :tabnext<CR>
 
 nmap <leader>th :tabprevious<CR>
 nmap <leader>tl :tabnext<CR>
@@ -394,14 +395,14 @@ nmap <leader>jn :%!python -m json.tool<CR>
 
 " 向上移动一行
 nmap <leader>u ddkP
-" 想下移动一行
+" 向下移动一行
 nmap <leader>d ddp
 vmap <leader>u xkP`[V`]
 vmap <leader>d xp`[V`]
 
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsSnippetDirectories = ["myultisnips"]
-let g:UltiSnipsSnippetsDir = "~/.vim/bundle/snipmate-snippets/myultisnips/"
+let g:UltiSnipsSnippetsDir = "~/code/snippets/myultisnips/"
 
 " 自动保存文件
 au InsertLeave *.* write
@@ -414,5 +415,121 @@ if has("gui_running")
    endif
 endif
 
-" ctrlp disabled
+" ctrlp disabled changed
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/node_modules/*,*/build/*        " Linux/MacOSX
+" 使用j k进入esc模式
+inoremap jk <esc>
+let g:goldenview__enable_default_mapping=0
+" 禁止原生的esc和ctrl-c，这个有点狠
+"inoremap <C-c> <nop>
+"inoremap <esc> <nop>
+
+" Unite Plugins
+" {{{
+nnoremap <C-b> :Unite -start-insert buffer<cr>
+nnoremap <C-g> :Unite grep<cr>
+"nnoremap <C-u> :Unite<cr>
+"nnoremap <C-f> :Unite -start-insert file file_rec buffer<cr>
+" For ag
+if executable('ag')
+  " Use ag in unite grep source.
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts =
+        \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+        \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Unite
+" http://eblundell.com/thoughts/2013/08/15/Vim-CtrlP-behaviour-with-Unite.html
+" Replicated Behaviour
+" 
+" <C-x> <C-v> open file in horizontal and vertical split
+" <C-t> open file in new tab
+" <esc> exit unite window
+" <C-j> <C-k> Navigation, keep hands on home row
+" 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:unite_enable_start_insert = 1
+let g:unite_split_rule = "botright"
+let g:unite_force_overwrite_statusline = 0
+let g:unite_winheight = 10
+
+call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+      \ 'ignore_pattern', join([
+      \ '\.git/', 'node_modules', 'build'
+      \ ], '\|'))
+
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+
+nnoremap <C-f> :<C-u>Unite  -buffer-name=files   -start-insert buffer file_rec/async:!<cr>
+
+autocmd FileType unite call s:unite_settings()
+
+function! s:unite_settings()
+  let b:SuperTabDisabled=1
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+  imap <silent><buffer><expr> <C-x> unite#do_action('split')
+  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
+  imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
+
+  nmap <buffer> <ESC> <Plug>(unite_exit)
+endfunction
+" Unite end"}}}
+
+" 窗口最大
+"set lines=999 columns=999
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => AirLine
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mini buffer explorer类似
+" let g:airline#extensions#tabline#enabled = 1
+" show git branch
+let g:airline#extensions#branch#enabled = 1
+" vim gitter show
+let g:airline#extensions#hunks#enabled = 1
+let g:airline#extensions#hunks#hunk_symbols = ['+', '~', '-']
+
+" powerline symbols
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+let g:airline#extensions#ctrlp#color_template = 'insert'
+let g:airline#extensions#ctrlp#color_template = 'normal'
+let g:airline#extensions#ctrlp#color_template = 'visual'
+let g:airline#extensions#ctrlp#color_template = 'replace'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => AirLine
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:wildfire_objects = { "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "i<", "i`" ], "html,xml" : ["at"] }
+
+" syntastic
+if file_readable('.jshintrc')
+  let g:syntastic_javascript_jshint_args = '--config ' . expand('%:p:h') . '/.jshintrc'
+else
+  let g:syntastic_javascript_jshint_args = '--config ~/.jshintrc'
+endif
+
+let g:syntastic_javascript_checkers = ['jshint']
+" ignore html
+let g:syntastic_mode_map = { 'mode': 'active',
+                     \ 'active_filetypes': [],
+                     \ 'passive_filetypes': ['html'] }
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+
+let g:table_mode_corner = '+'
