@@ -269,7 +269,7 @@ nnoremap ; :
 if has("win32")
   let g:ackprg="ack -H --nocolor --nogroup --column"
 elseif has("mac")
-  let g:ackprg = 'ag --nogroup --nocolor --column'
+  let g:ackprg="ack -H --nocolor --nogroup --column"
 else
   let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 endif
@@ -278,7 +278,7 @@ endif
 "let g:miniBufExplMapWindowNavArrows = 1
 "let g:miniBufExplMapCTabSwitchBufs = 1
 "let g:miniBufExplModSelTarget = 1
-"let g:miniBufExplMoreThanOne=0
+"let g:miniBufExplMoreThanOne=0 
 "let g:miniBufExplorerMoreThanOne=2
 "let g:miniBufExplMapWindowNavVim = 0
 

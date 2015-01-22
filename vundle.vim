@@ -76,3 +76,4 @@ Bundle 'w0ng/vim-hybrid'
 " 末尾空格高亮
 Bundle 'bronson/vim-trailing-whitespace'
 "Bundle 'bling/vim-bufferline'
+Bundle 'rking/ag.vim'
