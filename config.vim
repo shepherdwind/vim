@@ -261,7 +261,9 @@ nmap <S-Space> :VimwikiToggleListItem <CR>
 set wrap
 set textwidth=80
 set formatoptions=qrn1
-set colorcolumn=80
+if has("gui")
+  set colorcolumn=80
+end
 
 nnoremap ; :
 
@@ -520,11 +522,14 @@ let g:wildfire_objects = { "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "i<", "i`"
 " syntastic
 if file_readable('.jshintrc')
   let g:syntastic_javascript_jshint_args = '--config ' . expand('%:p:h') . '/.jshintrc'
+  let g:syntastic_javascript_jscs_args = '--config ' . expand('%:p:h') . '/.jscsrc'
 else
   let g:syntastic_javascript_jshint_args = '--config ~/.jshintrc'
+  let g:syntastic_javascript_jscs_args = '--config ~/.jscsrc'
 endif
 
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['jsxhint', 'jscs']
+
 " ignore html
 let g:syntastic_mode_map = { 'mode': 'active',
                      \ 'active_filetypes': [],
