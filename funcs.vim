@@ -163,3 +163,4 @@ endfunction
 nmap <leader>sw :call Eward_session('w')<cr>
 " session read
 nmap <leader>sr :call Eward_session('')<cr>
+

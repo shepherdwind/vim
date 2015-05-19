@@ -6,7 +6,7 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'ervandew/supertab'
 Bundle 'sjl/gundo.vim'
 Bundle 'kchmck/vim-coffee-script'
-Bundle 'techlivezheng/vim-plugin-minibufexpl'
+"Bundle 'techlivezheng/vim-plugin-minibufexpl'
 Bundle 'mattn/emmet-vim'
 "Bundle 'fholgado/minibufexpl.vim'
 Bundle 'Shougo/neocomplcache'
@@ -78,3 +78,8 @@ Bundle 'bronson/vim-trailing-whitespace'
 "Bundle 'bling/vim-bufferline'
 Bundle 'rking/ag.vim'
 Bundle 'rizzatti/dash.vim'
+
+Bundle 'szw/vim-ctrlspace'
+
+" hexmode
+Bundle 'fidian/hexmode'

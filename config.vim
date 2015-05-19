@@ -384,8 +384,8 @@ nnoremap <leader>sp :call Eward_set_pwd()<cr>
 "nmap <leader>t :call Eward_search_in_path()<cr>
 
 nnoremap <leader><space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
-nmap <D-]> :tabprevious<cr>
-nmap <D-[> :tabnext<CR>
+nmap <D-[> :tabprevious<cr>
+nmap <D-]> :tabnext<CR>
 
 nmap <leader>th :tabprevious<CR>
 nmap <leader>tl :tabnext<CR>
@@ -404,7 +404,7 @@ vmap <leader>d xp`[V`]
 
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsSnippetDirectories = ["myultisnips"]
-let g:UltiSnipsSnippetsDir = "~/code/snippets/myultisnips/"
+let g:UltiSnipsSnippetsDir = "~/.vim/bundle/snipmate-snippets/myultisnips"
 
 " 自动保存文件
 au InsertLeave *.* write
@@ -419,8 +419,6 @@ endif
 
 " ctrlp disabled changed
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/node_modules/*,*/build/*        " Linux/MacOSX
-" 使用j k进入esc模式
-inoremap jk <esc>
 let g:goldenview__enable_default_mapping=0
 " 禁止原生的esc和ctrl-c，这个有点狠
 "inoremap <C-c> <nop>
@@ -519,16 +517,22 @@ let g:airline#extensions#ctrlp#color_template = 'replace'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:wildfire_objects = { "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "i<", "i`" ], "html,xml" : ["at"] }
 
+let g:syntastic_javascript_jshint_args = '--config ~/.jshintrc'
+let g:syntastic_javascript_jscs_args = '--esprima=esprima-fb --config ~/.jscsrc'
 " syntastic
 if file_readable('.jshintrc')
   let g:syntastic_javascript_jshint_args = '--config ' . expand('%:p:h') . '/.jshintrc'
-  let g:syntastic_javascript_jscs_args = '--config ' . expand('%:p:h') . '/.jscsrc'
-else
-  let g:syntastic_javascript_jshint_args = '--config ~/.jshintrc'
-  let g:syntastic_javascript_jscs_args = '--config ~/.jscsrc'
 endif
 
-let g:syntastic_javascript_checkers = ['jsxhint', 'jscs']
+if file_readable('.jscsrc')
+  let g:syntastic_javascript_jscs_args = '--esprima=esprima-fb --config ' . expand('%:p:h') . '/.jscsrc'
+endif
+
+if file_readable('.eslintrc')
+  let g:syntastic_javascript_eslint_args = '--config ' . expand('%:p:h') . '/.eslintrc'
+endif
+
+let g:syntastic_javascript_checkers = ['jscs', 'eslint']
 
 " ignore html
 let g:syntastic_mode_map = { 'mode': 'active',
@@ -538,3 +542,10 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 
 let g:table_mode_corner = '+'
+
+
+" 去掉ui的tab
+set guioptions=
+let g:airline_exclude_preview = 1
+let g:ctrlspace_save_workspace_on_exit = 1
+left g:ctrlspace_load_last_workspace_on_start = 1
