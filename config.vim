@@ -22,23 +22,24 @@ let mapleader=","
 
 " 不向后兼容vi
 set nocompatible
+set hidden
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 set nobackup
 
-" 重启后撤销历史可用 persistent undo 
+" 重启后撤销历史可用 persistent undo
 set undofile
 set undodir=$VIMFILES/bak
 " 最大可回滚层级，如果太大了不好，导致备份文件夹太多了
 " 我的mac上甚至出现bak文件有3G那么大
-set undolevels=100 
+set undolevels=100
 
 set history=50
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
-
+set synmaxcol=200
 " 高亮当前行
 if has('gui')
   set cursorline
@@ -92,6 +93,8 @@ if has("autocmd")
     \   exe "normal! g`\"" |
     \ endif
 
+  autocmd BufNewFile,BufRead *.schema setlocal filetype=schema
+  autocmd BufNewFile,BufRead *.jsx setlocal filetype=javascript.jsx
   augroup END
 
 else
@@ -213,6 +216,8 @@ set foldmethod=marker
 autocmd filetype javascript setl foldmethod=syntax
 " 文件增加后缀.js
 autocmd filetype javascript set suffixesadd+=.js
+autocmd filetype javascript set suffixesadd+=.jsx
+autocmd filetype javascript set suffixesadd+=.ts
 "au BufNewFile,BufReadPost *.coffee setl foldmethod=indent
 set foldnestmax=2
 let perl_fold=1               " Perl
@@ -374,6 +379,7 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 nmap <leader>cd :call OpenFoldPwd()<CR>
 " NERDTree
 map <leader>ff :NERDTreeToggle<CR>
+map <leader>fc :NERDTreeCWD<CR>
 " 打开文件的时候退出nerdtree
 let g:NERDTreeQuitOnOpen = 0
 
@@ -517,31 +523,9 @@ let g:airline#extensions#ctrlp#color_template = 'replace'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:wildfire_objects = { "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "i<", "i`" ], "html,xml" : ["at"] }
 
-let g:syntastic_javascript_jshint_args = '--config ~/.jshintrc'
-let g:syntastic_javascript_jscs_args = '--esprima=esprima-fb --config ~/.jscsrc'
-" syntastic
-if file_readable('.jshintrc')
-  let g:syntastic_javascript_jshint_args = '--config ' . expand('%:p:h') . '/.jshintrc'
-endif
-
-if file_readable('.jscsrc')
-  let g:syntastic_javascript_jscs_args = '--esprima=esprima-fb --config ' . expand('%:p:h') . '/.jscsrc'
-endif
-
-if file_readable('.eslintrc')
-  let g:syntastic_javascript_eslint_args = '--config ' . expand('%:p:h') . '/.eslintrc'
-endif
-
-let g:syntastic_javascript_checkers = ['jscs', 'eslint']
-
-" ignore html
-let g:syntastic_mode_map = { 'mode': 'active',
-                     \ 'active_filetypes': [],
-                     \ 'passive_filetypes': ['html'] }
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-
 let g:table_mode_corner = '+'
+
+autocmd FileType javascript,jsx,javascript.jsx let g:ale_linters.javascript = ['eslint']
 
 
 " 去掉ui的tab
@@ -549,3 +533,9 @@ set guioptions=
 let g:airline_exclude_preview = 1
 let g:ctrlspace_save_workspace_on_exit = 1
 left g:ctrlspace_load_last_workspace_on_start = 1
+
+if executable("ag")
+  let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+endif
+
+let g:AutoPairsFlyMode = 1
