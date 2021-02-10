@@ -426,65 +426,6 @@ endif
 " ctrlp disabled changed
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/node_modules/*,*/build/*        " Linux/MacOSX
 let g:goldenview__enable_default_mapping=0
-" 禁止原生的esc和ctrl-c，这个有点狠
-"inoremap <C-c> <nop>
-"inoremap <esc> <nop>
-
-" Unite Plugins
-" {{{
-nnoremap <C-b> :Unite -start-insert buffer<cr>
-nnoremap <C-g> :Unite grep<cr>
-"nnoremap <C-u> :Unite<cr>
-"nnoremap <C-f> :Unite -start-insert file file_rec buffer<cr>
-" For ag
-if executable('ag')
-  " Use ag in unite grep source.
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts =
-        \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-        \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-  let g:unite_source_grep_recursive_opt = ''
-endif
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Unite
-" http://eblundell.com/thoughts/2013/08/15/Vim-CtrlP-behaviour-with-Unite.html
-" Replicated Behaviour
-" 
-" <C-x> <C-v> open file in horizontal and vertical split
-" <C-t> open file in new tab
-" <esc> exit unite window
-" <C-j> <C-k> Navigation, keep hands on home row
-" 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:unite_enable_start_insert = 1
-let g:unite_split_rule = "botright"
-let g:unite_force_overwrite_statusline = 0
-let g:unite_winheight = 10
-
-call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-      \ 'ignore_pattern', join([
-      \ '\.git/', 'node_modules', 'build'
-      \ ], '\|'))
-
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-
-nnoremap <C-f> :<C-u>Unite  -buffer-name=files   -start-insert buffer file_rec/async:!<cr>
-
-autocmd FileType unite call s:unite_settings()
-
-function! s:unite_settings()
-  let b:SuperTabDisabled=1
-  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  imap <silent><buffer><expr> <C-x> unite#do_action('split')
-  imap <silent><buffer><expr> <C-v> unite#do_action('vsplit')
-  imap <silent><buffer><expr> <C-t> unite#do_action('tabopen')
-
-  nmap <buffer> <ESC> <Plug>(unite_exit)
-endfunction
-" Unite end"}}}
 
 " 窗口最大
 "set lines=999 columns=999
