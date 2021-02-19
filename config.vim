@@ -466,8 +466,6 @@ let g:wildfire_objects = { "*" : ["i'", 'i"', "i)", "i]", "i}", "ip", "i<", "i`"
 
 let g:table_mode_corner = '+'
 
-autocmd FileType javascript,jsx,javascript.jsx let g:ale_linters.javascript = ['eslint']
-
 
 " 去掉ui的tab
 set guioptions=
